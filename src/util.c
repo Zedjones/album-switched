@@ -60,22 +60,25 @@ bool isAlbum(){
     DIR *dr = opendir(BASE_DIR);
     while ((de = readdir(dr)) != NULL){
         empty = false;
+        break;
     }
     mutexUnlock(&albumMutex);
-    return !empty;
+    return empty;
 }
 
 void setAlbum(bool newAlbum){
     mutexLock(&albumMutex);
     if(newAlbum){
-        //rename(RENAMED_DIR, ALBUM_TITLE_DIR);
+        rename(RENAMED_DIR, ALBUM_TITLE_DIR);
         playMp3("/ftpd/pauseon.mp3");
-        fopen("/newAlbum.txt", "w");
+        FILE* new_album = fopen("/newAlbum.txt", "w");
+        fclose(new_album);
     }
     else{
-        //rename(ALBUM_TITLE_DIR, RENAMED_DIR);
+        rename(ALBUM_TITLE_DIR, RENAMED_DIR);
         playMp3("/ftpd/pauseoff.mp3");
-        fopen("/notNewAlbum.txt", "w");
+        FILE* not_new_album = fopen("/notNewAlbum.txt", "w");
+        fclose(not_new_album);
     }
     mutexUnlock(&albumMutex);
 }

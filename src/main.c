@@ -59,8 +59,9 @@ void inputPoller(){
         u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
         u64 kHeld = hidKeysHeld(CONTROLLER_P1_AUTO);
 
-        if ((kDown & KEY_PLUS || kDown & KEY_MINUS || kDown & KEY_Y) && (kHeld & KEY_PLUS && kHeld & KEY_MINUS && kHeld & KEY_Y))
+        if ((kDown & KEY_PLUS || kDown & KEY_MINUS || kDown & KEY_Y) && (kHeld & KEY_PLUS && kHeld & KEY_MINUS && kHeld & KEY_Y)){
             setAlbum(!isAlbum());
+        }
     }
 }
 
@@ -79,5 +80,8 @@ int main(){
     rc = threadStart(&pauseThread);
     if (R_FAILED(rc)){
         fatalLater(rc);
+    }
+    while(appletMainLoop()){
+        svcSleepThread(1e+8L);
     }
 }
